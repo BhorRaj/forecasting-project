@@ -8,10 +8,10 @@ import warnings
 warnings.filterwarnings("ignore")
 
 #load the model
-model = pickle.load(open('forecast_model.pickle','rb'))
+model = pickle.load(open('prophetmodel.pickle','rb'))
 
 #load dataset to plot alongside predictions
-df = pd.read_excel("CO2 dataset.xlsx")
+df = pd.read_csv("brent-daily.csv")
 df['Year'] = pd.to_datetime(df['Year'], format='%Y')
 df.set_index(['Year'], inplace=True)
 
@@ -25,7 +25,7 @@ year = st.slider("Select number of Years",1,30,step = 1)
     
     
 pred = model.forecast(year)
-pred = pd.DataFrame(pred, columns=['CO2'])
+pred = pd.DataFrame(pred, columns=['Price'])
    
 if st.button("Predict"):
 
@@ -34,7 +34,7 @@ if st.button("Predict"):
              st.dataframe(pred)
         with col2:
             fig, ax = plt.subplots()
-            df['CO2'].plot(style='--', color='gray', legend=True, label='known')
-            pred['CO2'].plot(color='b', legend=True, label='prediction')
+            df['Price'].plot(style='--', color='gray', legend=True, label='known')
+            pred['Price'].plot(color='b', legend=True, label='prediction')
             st.pyplot(fig)
     
